@@ -45,7 +45,7 @@ public class StudentController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/filter-by-age") //решил создать два эндпоинта с разными url, так как условие явно не оговорено в ДЗ.
+    @GetMapping("/filterByAge") //решил создать два эндпоинта с разными url, так как условие явно не оговорено в ДЗ.
     // При этом в Faculty использовал перегрузку метода ради интереса. Можно было бы ещё сделать приём трёх параметров в
     // рамках одного метода и логикой внутри метода их разбирать, но это бы нарушило явное требование ДЗ "добавить эндпоинт".
     public ResponseEntity<Collection<Student>> filterByAge(@RequestParam(value = "age") int age) {
@@ -55,7 +55,7 @@ public class StudentController {
         }
         return ResponseEntity.ok(filteredStudents);
     }
-    @GetMapping("/find-by-age-between")
+    @GetMapping("/findByAgeBetween")
     public ResponseEntity<Collection<Student>> findByAgeBetween(@RequestParam(value = "min") int min,
                                                                 @RequestParam(value = "max") int max) {
         Collection<Student> foundStudents = studentService.findByAgeBetween(min, max);

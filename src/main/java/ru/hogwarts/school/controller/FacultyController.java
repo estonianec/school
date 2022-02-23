@@ -52,7 +52,7 @@ public class FacultyController {
         return ResponseEntity.ok(filteredFaculties);
     }
 
-    @GetMapping(value = "/", params = {"color-or-name"})
+    @GetMapping(value = "/", params = {"colorOrName"})
     public ResponseEntity<Collection<Faculty>> findByColorIgnoreCaseOrNameIgnoreCase(@RequestParam(value = "colorOrName", required = false) String colorOrName) {
         Collection<Faculty> filteredFaculties = facultyService.findByColorIgnoreCaseOrNameIgnoreCase(colorOrName, colorOrName);
         if (filteredFaculties.isEmpty()) {
