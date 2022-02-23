@@ -56,7 +56,8 @@ public class StudentController {
         return ResponseEntity.ok(filteredStudents);
     }
     @GetMapping("/find-by-age-between")
-    public ResponseEntity<Collection<Student>> findByAgeBetween(@RequestParam(value = "min") int min,@RequestParam(value = "max") int max) {
+    public ResponseEntity<Collection<Student>> findByAgeBetween(@RequestParam(value = "min") int min,
+                                                                @RequestParam(value = "max") int max) {
         Collection<Student> foundStudents = studentService.findByAgeBetween(min, max);
         if (foundStudents.isEmpty()) {
             ResponseEntity.notFound().build();

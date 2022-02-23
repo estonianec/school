@@ -1,5 +1,8 @@
 package ru.hogwarts.school.model;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -10,11 +13,16 @@ public class Student {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private long id;
     @ManyToOne
-    @JoinColumn(name = "faculty_id")
+    @JoinColumn(name = "faculty_id", nullable = false)
     private Faculty faculty;
     private String name;
     private int age;
 
+    public Student(Faculty faculty, String name, int age) {
+        this.faculty = faculty;
+        this.name = name;
+        this.age = age;
+    }
     public Student() {
 
     }
