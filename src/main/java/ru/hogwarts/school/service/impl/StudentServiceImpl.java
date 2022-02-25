@@ -6,7 +6,6 @@ import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -40,9 +39,6 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Collection<Student> filterByAge(int age) {
-//        return studentRepository.findAll().stream()
-//                .filter(e -> e.getAge() == age)
-//                .collect(Collectors.toList());
         return studentRepository.findByAge(age);
     }
 
