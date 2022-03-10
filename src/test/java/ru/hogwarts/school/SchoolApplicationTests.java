@@ -94,7 +94,8 @@ class SchoolApplicationTests {
         restTemplate.delete(resourceUrl + "/" + id);
 
         Assertions
-                .assertThat(this.restTemplate.getForObject(resourceUrl + "/" + id, Student.class).getName())
+//                .assertThat(this.restTemplate.getForObject(resourceUrl + "/" + id, Student.class).getName()) //рабочий но странный вариант
+                .assertThat(this.restTemplate.getForObject(resourceUrl + "/" + id, Student.class)) //не рабочий но логичный вариант
                 .isNull();
 
     }
