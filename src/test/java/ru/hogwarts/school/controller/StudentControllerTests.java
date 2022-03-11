@@ -1,4 +1,4 @@
-package ru.hogwarts.school;
+package ru.hogwarts.school.controller;
 
 
 import org.assertj.core.api.Assertions;
@@ -8,21 +8,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import ru.hogwarts.school.controller.StudentController;
 import ru.hogwarts.school.model.Student;
 
 import java.util.Collection;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class SchoolApplicationTests {
+class StudentControllerTests {
 
     @LocalServerPort
     private int port;
 
     private String resourceUrl;
+    // Понимаю, что можно было бы работать со статичными id, но тогда не получилось бы реализовать замысел при котором
+    // тесты проводятся в живой БД при этом на неё не влияют (за исключением увеличения счётчика ID после каждого теста).
+    // Понимаю, что можно было работать в тестовой БД, но не сумел нагуглить, как использовать две БД в одном проекте.
+    // После общение с Кириллом Качаловым в личке пришло понимание, что "задача проверить через тест рест темплейт,
+    // что при запросе что-то возвращается", а не функциональное тестирование и что можно было обойтись условным .isNotNull()
+    // на каждом этапе проверки. Скажете убрать лишнее - уберу, хоть мне это лишнее и нравится :)
     private long id;
     private Student student;
-
 
     @Autowired
     private StudentController studentController;
@@ -40,12 +44,12 @@ class SchoolApplicationTests {
     }
 
     @Test
-    public void contextLoads() throws Exception {
+    public void contextLoads() {
         Assertions.assertThat(studentController).isNotNull();
     }
 
     @Test
-    public void createStudentTest() throws Exception {
+    public void createStudentTest() {
         Student studentInDb = restTemplate.postForObject(resourceUrl, student, Student.class);
         id = studentInDb.getId();
         student.setId(id);
@@ -58,7 +62,7 @@ class SchoolApplicationTests {
     }
 
     @Test
-    public void editStudentTest() throws Exception {
+    public void editStudentTest() {
 
         id = restTemplate.postForObject(resourceUrl, student, Student.class).getId();
 
@@ -94,8 +98,10 @@ class SchoolApplicationTests {
         restTemplate.delete(resourceUrl + "/" + id);
 
         Assertions
-//                .assertThat(this.restTemplate.getForObject(resourceUrl + "/" + id, Student.class).getName()) //рабочий но странный вариант
-                .assertThat(this.restTemplate.getForObject(resourceUrl + "/" + id, Student.class)) //не рабочий но логичный вариант
+                //рабочий но странный вариант
+                .assertThat(this.restTemplate.getForObject(resourceUrl + "/" + id, Student.class).getName())
+                //не рабочий но логичный вариант. Почему тест для Actual создает пустой объект класса Student, а не просто null?
+//                .assertThat(this.restTemplate.getForObject(resourceUrl + "/" + id, Student.class))
                 .isNull();
 
     }
