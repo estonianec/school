@@ -17,4 +17,10 @@ public interface StudentService {
     Collection<Student> filterByAge(int age);
 
     Collection<Student> findByAgeBetween(int min, int max);
+
+    int countOfStudents();
+
+    float averageAgeOfStudents();
+
+    Collection<Student> showLastFiveStudents();
 }
