@@ -1,8 +1,5 @@
 package ru.hogwarts.school.model;
 
-import com.fasterxml.jackson.annotation.JacksonInject;
-import com.fasterxml.jackson.annotation.JsonSetter;
-
 import javax.persistence.*;
 import java.util.Objects;
 

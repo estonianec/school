@@ -1,6 +1,7 @@
 package ru.hogwarts.school.service.impl;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Avatar;
@@ -13,6 +14,7 @@ import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Objects;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
@@ -47,8 +49,6 @@ public class AvatarServiceImpl implements AvatarService {
         Student student = studentService.getStudent(studentId);
         Path avatarPath = Path.of(avatarsDir, studentId + "." + getFileExtension(Objects.requireNonNull(avatar.getOriginalFilename())));
         Files.createDirectories(avatarPath.getParent());
-        //При добавлении аватарки отличного от предыдущего расширения, заметил, что сохраняются старые неиспользуемые
-        //файлы (например 1.jpg, 1.jpeg, 1.png и т.д.).
         if (avatarRepository.findAvatarByStudentId(studentId).isPresent()) {
             deletePreviousAvatar(studentId);
         }
@@ -80,5 +80,11 @@ public class AvatarServiceImpl implements AvatarService {
         if(originalFileName.lastIndexOf(".") != -1 && originalFileName.lastIndexOf(".") != 0)
             return originalFileName.substring(originalFileName.lastIndexOf(".")+1);
         else return "";
+    }
+
+    @Override
+    public Collection<Avatar> findAll(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        return avatarRepository.findAll(pageRequest).getContent();
     }
 }
