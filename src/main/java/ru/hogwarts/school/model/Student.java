@@ -13,7 +13,8 @@ public class Student {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private long id;
     @ManyToOne
-    @JoinColumn(name = "faculty_id", nullable = false)
+//    @JoinColumn(name = "faculty_id", nullable = false)
+    @JoinColumn(name = "faculty_id")
     private Faculty faculty;
     private String name;
     private int age;
