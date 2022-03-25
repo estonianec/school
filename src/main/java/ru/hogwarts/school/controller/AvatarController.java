@@ -1,5 +1,7 @@
 package ru.hogwarts.school.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,15 +21,18 @@ import java.util.Objects;
 @RestController
 @RequestMapping("student")
 public class AvatarController {
+
+    Logger logger = LoggerFactory.getLogger(AvatarController.class);
     private final AvatarService avatarService;
 
     public AvatarController(AvatarService avatarService) {
         this.avatarService = avatarService;
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadAvatar(@PathVariable Long id, @RequestParam MultipartFile avatar) throws IOException {
         if (!Objects.equals(avatar.getContentType(), "image/jpeg")) {
+            logger.warn("Attempt upload avatar with wrong extension!");
             return ResponseEntity.badRequest().body("Avatars support just .jpeg type of file");
         }
         avatarService.uploadAvatar(id, avatar);
