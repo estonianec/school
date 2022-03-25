@@ -1,5 +1,7 @@
 package ru.hogwarts.school.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,8 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Transactional
 public class AvatarServiceImpl implements AvatarService {
 
+    static Logger logger = LoggerFactory.getLogger(AvatarServiceImpl.class);
+
     @Value("${avatars.dir.path}")
     private String avatarsDir;
     private final StudentService studentService;
@@ -34,18 +38,23 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     public void deletePreviousAvatar(long id) throws IOException {
+        logger.info("Was invoked method for delete previous avatar");
         File f=new File(avatarsDir);
+        logger.trace("Was open dir {} with avatars", avatarsDir);
         String[] arr=f.list((f1, name) -> name.startsWith(id + "."));
+        logger.trace("Was made array with all files from dir {} with id = " + id, avatarsDir);
         assert arr != null;
         for(String x:arr)
         {
             Path previousAvatarPath = Path.of(avatarsDir, x);
+            logger.debug("File {} from {} was deleted", x, avatarsDir);
             Files.delete(previousAvatarPath);
         }
     }
 
     @Override
     public void uploadAvatar(Long studentId, MultipartFile avatar) throws IOException {
+        logger.info("Was invoked method for upload avatar");
         Student student = studentService.getStudent(studentId);
         Path avatarPath = Path.of(avatarsDir, studentId + "." + getFileExtension(Objects.requireNonNull(avatar.getOriginalFilename())));
         Files.createDirectories(avatarPath.getParent());
@@ -72,11 +81,13 @@ public class AvatarServiceImpl implements AvatarService {
     }
     @Override
     public Avatar findAvatar(long id) {
+        logger.info("Was invoked method for find avatar with id = " + id);
         return avatarRepository.findAvatarByStudentId(id).orElse(new Avatar());
     }
 
 
     private static String getFileExtension(String originalFileName) {
+        logger.info("Was invoked method for get file extension");
         if(originalFileName.lastIndexOf(".") != -1 && originalFileName.lastIndexOf(".") != 0)
             return originalFileName.substring(originalFileName.lastIndexOf(".")+1);
         else return "";
@@ -84,6 +95,7 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public Collection<Avatar> findAll(int page, int size) {
+        logger.info("Was invoked method for show avatars by lists starts from page = {} and with size = " + size, page);
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         return avatarRepository.findAll(pageRequest).getContent();
     }
