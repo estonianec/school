@@ -92,4 +92,30 @@ public class StudentServiceImpl implements StudentService {
                 .mapToDouble(Student::getAge).average().getAsDouble();
 
     }
+
+    @Override
+    public void getStudentsNamesFromThread() {
+        logger.info("Was invoked method for show students names from thread");
+        List<String> listOfStudentsNames = studentRepository.findAll().stream()
+                .sorted(Comparator.comparing(Student::getId))
+                .map(Student::getName)
+                .collect(Collectors.toList());
+
+        System.out.println(listOfStudentsNames.get(0));
+        System.out.println(listOfStudentsNames.get(1));
+
+        Thread thread1 = new Thread(() -> {
+            logger.info("Was created thread one");
+            System.out.println(listOfStudentsNames.get(2));
+            System.out.println(listOfStudentsNames.get(3));
+        });
+        Thread thread2 = new Thread(() -> {
+            logger.info("Was created thread two");
+            System.out.println(listOfStudentsNames.get(4));
+            System.out.println(listOfStudentsNames.get(5));
+        });
+        thread1.start();
+        thread2.start();
+    }
+
 }
