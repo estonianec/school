@@ -1,16 +1,22 @@
 package ru.hogwarts.school.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("student")
 public class StudentController {
     private final StudentService studentService;
+    Logger logger = LoggerFactory.getLogger(StudentController.class);
 
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
@@ -77,5 +83,41 @@ public class StudentController {
             ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(lastFiveStudents);
+    }
+
+    @GetMapping("/show-sorted-students")
+    public ResponseEntity<Collection<String>> showSortedStudents() {
+        long time = System.currentTimeMillis();
+        Collection<String> allStudents = studentService.showSortedStudents();
+        time = System.currentTimeMillis() - time;
+        logger.info("List of names completed in " + time + " ms");
+        if (allStudents.isEmpty()) {
+            ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(allStudents);
+    }
+    @GetMapping("average-age-of-students-from-stream")
+    public double showAverageAgeOfStudentsFromStream() {
+        return studentService.averageAgeOfStudentsFromStream();
+    }
+
+    @GetMapping("get-some-num")
+    public int getSomeNum() {
+        long timeBefore = System.currentTimeMillis();
+        int sum = Stream.iterate(1, a -> a +1) .limit(100_000_000) .reduce(0, (a, b) -> a + b );
+        timeBefore = System.currentTimeMillis() - timeBefore;
+        logger.info("Sum calculated in before " + timeBefore + " ms");
+        long timeAfter = System.currentTimeMillis();
+        List<Integer> listOfInt = Stream.iterate(1, a -> a + 1)
+                .limit(100_000_000)
+                .collect(Collectors.toList());
+        sum = listOfInt.stream()
+                .parallel()
+                .mapToInt(a->a)
+//                .reduce(0, (a, b) -> a + b );
+                .sum();
+        timeAfter = System.currentTimeMillis() - timeAfter;
+        logger.info("Sum calculated in after " + timeAfter + " ms");
+        return sum;
     }
 }

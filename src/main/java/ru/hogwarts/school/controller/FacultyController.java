@@ -7,6 +7,8 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("faculty")
@@ -68,4 +70,10 @@ public class FacultyController {
         }
         return ResponseEntity.ok(filteredFaculties);
     }
+
+    @GetMapping("/get-longest-name-of-faculties")
+    public Optional<String> getLongestNameOfFaculties() {
+        return facultyService.getLongestNameOfFaculties();
+    }
+
 }
