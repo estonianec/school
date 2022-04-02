@@ -120,4 +120,12 @@ public class StudentController {
         logger.info("Sum calculated in after " + timeAfter + " ms");
         return sum;
     }
+    @GetMapping("get-students-from-thread")
+    public void showStudentsNamesFromThread() {
+        studentService.getStudentsNamesFromThread();
+    }
+    @GetMapping("get-stedents-from-sync-thread")
+    public void showStudentsNamesFromSyncThread() {
+        studentService.getStudentsNamesFromSyncThread();
+    }
 }
