@@ -124,8 +124,8 @@ public class StudentController {
     public void showStudentsNamesFromThread() {
         studentService.getStudentsNamesFromThread();
     }
-
+    @GetMapping("get-stedents-from-sync-thread")
     public void showStudentsNamesFromSyncThread() {
-        studentService.
+        studentService.getStudentsNamesFromSyncThread();
     }
 }

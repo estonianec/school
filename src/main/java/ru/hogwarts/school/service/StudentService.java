@@ -30,4 +30,6 @@ public interface StudentService {
     double averageAgeOfStudentsFromStream();
 
     void getStudentsNamesFromThread();
+
+    void getStudentsNamesFromSyncThread();
 }

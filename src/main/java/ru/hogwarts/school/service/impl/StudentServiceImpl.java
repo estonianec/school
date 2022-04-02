@@ -118,4 +118,28 @@ public class StudentServiceImpl implements StudentService {
         thread2.start();
     }
 
+    @Override
+    public void getStudentsNamesFromSyncThread() {
+        List<String> listOfStudentsNames = studentRepository.findAll().stream()
+                .sorted(Comparator.comparing(Student::getId))
+                .map(Student::getName)
+                .collect(Collectors.toList());
+        printStudentName(listOfStudentsNames, 0);
+        printStudentName((listOfStudentsNames), 1);
+        Thread thread1 = new Thread(() -> {
+            printStudentName(listOfStudentsNames, 2);
+            printStudentName(listOfStudentsNames, 3);
+        });
+        Thread thread2 = new Thread(() -> {
+            printStudentName(listOfStudentsNames, 4);
+            printStudentName(listOfStudentsNames, 5);
+        });
+        thread1.start();
+        thread2.start();
+    }
+
+    private synchronized void printStudentName(List<String> listOfStudentsNames, int num) {
+        System.out.println(listOfStudentsNames.get(num));
+    }
+
 }
