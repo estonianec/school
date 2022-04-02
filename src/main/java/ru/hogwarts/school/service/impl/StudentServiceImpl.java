@@ -107,6 +107,10 @@ public class StudentServiceImpl implements StudentService {
         Thread thread1 = new Thread(() -> {
             logger.info("Was created thread one");
             System.out.println(listOfStudentsNames.get(2));
+//            String s = "";
+//            for (int i = 0; i < 100_000; i++) {
+//                s += i;
+//            }
             System.out.println(listOfStudentsNames.get(3));
         });
         Thread thread2 = new Thread(() -> {
