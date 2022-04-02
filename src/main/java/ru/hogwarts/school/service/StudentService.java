@@ -26,5 +26,5 @@ public interface StudentService {
 
     Collection<String> showSortedStudents();
 
-    float averageAgeOfStudentsFromStream();
+    double averageAgeOfStudentsFromStream();
 }

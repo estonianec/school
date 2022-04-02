@@ -97,7 +97,7 @@ public class StudentController {
         return ResponseEntity.ok(allStudents);
     }
     @GetMapping("average-age-of-students-from-stream")
-    public float showAverageAgeOfStudentsFromStream() {
+    public double showAverageAgeOfStudentsFromStream() {
         return studentService.averageAgeOfStudentsFromStream();
     }
 

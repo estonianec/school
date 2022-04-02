@@ -86,9 +86,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public float averageAgeOfStudentsFromStream() {
+    public double averageAgeOfStudentsFromStream() {
         logger.info("Was invoked method for show average age of students from stream");
-        return (float) studentRepository.findAll().stream()
+        return studentRepository.findAll().stream()
                 .mapToDouble(Student::getAge).average().getAsDouble();
 
     }
